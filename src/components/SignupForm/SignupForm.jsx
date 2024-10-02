@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import * as authService from '../../services/authService'
 
 const SignupForm = (props) => {
   const navigate = useNavigate();
@@ -21,8 +22,9 @@ const SignupForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      props.setUser(formData) // this will modify the state in the App component
-      navigate('/') // upon redirect you will see the "Dashboard" page
+      const newUserResponse = await authService.signup(formData)
+      props.setUser(newUserResponse.user);
+      navigate('/')
     } catch (err) {
       updateMessage(err.message)
     }
